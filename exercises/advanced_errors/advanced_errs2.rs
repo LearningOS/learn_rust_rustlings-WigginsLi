@@ -55,6 +55,13 @@ impl From<ParseFloatError> for ParseClimateError {
 // is not necessary to implement any methods inside the missing trait.
 
 impl std::error::Error for ParseClimateError {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        match self {
+            Self::ParseInt(e) => Some(e),
+            Self::ParseFloat(e) => Some(e),
+            _ => None,
+        }
+    }
 }
 
 // The `Display` trait allows for other code to obtain the error formatted
@@ -99,14 +106,10 @@ impl FromStr for Climate {
             return Err(ParseClimateError::Empty);
         }
         let v: Vec<_> = s.split(',').collect();
-        if v.len() != 3 {
-            return Err(ParseClimateError::BadLen);
-        }
-
         let (city, year, temp) = match &v[..] {
-            [city, year, temp] if city.is_empty() => return Err(ParseClimateError::NoCity),
+            ["", ..] => return Err(ParseClimateError::NoCity),
             [city, year, temp] => (city.to_string(), year, temp),
-            _ => return Err(ParseClimateError::NoCity),
+            _ => return Err(ParseClimateError::BadLen),
         };
         let year: u32 = year.parse()?;
         let temp: f32 = temp.parse()?;
@@ -205,7 +208,7 @@ mod test {
         );
     }
     #[test]
-    #[ignore]
+    // #[ignore]
     fn test_downcast() {
         let res = "São Paulo,-21,28.5".parse::<Climate>();
         assert!(matches!(res, Err(ParseClimateError::ParseInt(_))));
