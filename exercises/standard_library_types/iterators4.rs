@@ -1,6 +1,6 @@
 // iterators4.rs
 
-// I AM NOT DONE
+
 
 pub fn factorial(num: u64) -> u64 {
     // Complete this function to return the factorial of num
@@ -12,6 +12,31 @@ pub fn factorial(num: u64) -> u64 {
     // For an extra challenge, don't use:
     // - recursion
     // Execute `rustlings hint iterators4` for hints.
+
+    (1..num+1).product()
+
+    // if num <=2 {
+    //     num
+    // } else {
+    //     let mut v : Vec<u64> = vec![0; 10];
+    //     v = v.iter()
+    //         .enumerate()
+    //         .map(|(idx, val)| 
+    //             {
+    //                 if idx <= 2 {
+    //                     idx as u64
+    //                 }else {
+    //                     v[idx-1] * (idx as u64)
+    //                 }
+    //             })
+    //         .collect::<Vec<u64>>();
+            
+    //     eprintln!("{:?}", v);
+    //     match v.get(num as usize) {
+    //         Some(x) => *x,
+    //         None => 0
+    //     }
+    // }
 }
 
 #[cfg(test)]
